@@ -1,9 +1,12 @@
+import { Link } from 'react-router-dom';
+
 function Header(props){
     return(
-        <div className="header">
-            <h1>Header</h1>
-        </div>
-
+        <nav>
+            <Link to="/">
+                <div>People App</div>
+            </Link>
+        </nav>
     )
 }
 
