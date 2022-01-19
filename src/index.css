@@ -18,3 +18,7 @@ code {
     monospace;
 }
 
+img {
+  max-width: 200px;
+}
+

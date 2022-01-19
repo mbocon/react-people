@@ -1,20 +1,66 @@
-import { Link } from 'react-router-dom';
-
+import { useState } from "react";
 function Show(props) {
-    console.log(props, 'are show props')
-    const person = props.people.find(p => p._id === props.match.params.id);
+  const id = props.match.params.id;
+  const people = props.people;
+  const person = people.find((p) => p._id === id);
 
-    return (
-        <div className="show">
-            <h1>{person.name}</h1>
-            <h3>{person.title}</h3>
-            <img src={person.img} alt={person.name} />
-            <br />
-            <Link to="/" >
-                <button onClick={() => props.deletePerson(person._id)}>X</button>
-            </Link>
-        </div>
-    )
+  const [editForm, setEditForm] = useState(person);
+
+  // handleChange function for form
+  const handleChange = (event) => {
+    setEditForm(prevState => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    
+    }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    props.updatePeople(editForm);
+    props.history.push("/");
+  };
+
+  const removePerson = () => {
+    props.people.splice(props.people.indexOf(person), 1);
+    props.deletePeople(person._id);
+    props.history.push("/");
+  };
+
+  return (
+    <div className="person">
+      <h1>{person.name}</h1>
+      <h2>{person.title}</h2>
+      <img src={person.img} alt={person.name} />
+      <button id="delete" onClick={removePerson}>
+        DELETE
+      </button>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={editForm.name}
+          name="name"
+          placeholder="name"
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          value={editForm.img}
+          name="img"
+          placeholder="image URL"
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          value={editForm.title}
+          name="title"
+          placeholder="title"
+          onChange={handleChange}
+        />
+        <input type="submit" value="Update Person" />
+      </form>
+    </div>
+  );
 }
 
 export default Show;
